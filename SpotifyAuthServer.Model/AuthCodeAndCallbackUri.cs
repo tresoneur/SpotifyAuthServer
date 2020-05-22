@@ -7,7 +7,6 @@ namespace SpotifyAuthServer.Controllers.Model
 {
     public class AuthCodeAndCallbackUri
     {
-
         public string Code { get; set; }
 
         public string CallbackUri { get; set; }

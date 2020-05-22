@@ -8,6 +8,5 @@ namespace SpotifyAuthServer.Controllers.Model
     public class AuthCode
     {
         public string Code { get; set; }
-
     }
 }
