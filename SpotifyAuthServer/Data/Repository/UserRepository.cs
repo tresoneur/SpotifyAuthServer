@@ -37,26 +37,25 @@ namespace SpotifyAuthServer.Data.Repository
             }
         }
 
+        /// <summary>
+        /// Only ever call this from within a transaction.
+        /// </summary>
         public async Task<bool> Update(string code, string authToken, int authTokenExpiresIn, DateTime authTokenAcquired)
         {
-            await using (var tran = await db.Database.BeginTransactionAsync(System.Data.IsolationLevel.RepeatableRead))
-            {
-                var user = Get(code);
+            var user = Get(code);
                 
-                if(user is null)
-                    return false;
+            if(user is null)
+                return false;
 
-                user.AccessToken = authToken;
-                user.AccessTokenExpiresInSec = authTokenExpiresIn;
-                user.AccessTokenAcquiredAt = authTokenAcquired;
+            user.AccessToken = authToken;
+            user.AccessTokenExpiresInSec = authTokenExpiresIn;
+            user.AccessTokenAcquiredAt = authTokenAcquired;
 
-                db.Users.Update(user);
+            db.Users.Update(user);
 
-                await db.SaveChangesAsync();
-                await tran.CommitAsync();
+            await db.SaveChangesAsync();
 
-                return true;
-            }
+            return true;
         }
 
         public User Get(string code) =>
